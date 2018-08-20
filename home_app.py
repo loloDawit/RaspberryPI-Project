@@ -48,7 +48,7 @@ def getTemJsonData():
     from_date_str = request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #get the from_date
     to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M")) #get the to_date
     range_h_form = request.args.get('range_h','')   #returns a string 
-    
+    timezone      = request.args.get('timezone', 'Etc/UTC');
     print(from_date_str) #testing the url date
     print(to_date_str)
 
@@ -64,7 +64,9 @@ def getTemJsonData():
 
     if not validate_Date(to_date_str):
         to_date_str   =  time.strftime("%Y-%m-%d %H:%M")  
-    
+    #create datetime object so that we can covert to UTC from the browers local time 
+    from_date_obj     = datetime.datetime.strptime(from_date_str,'%Y-%m-%d %H:%M')
+    to_date_obj       = datetime.datetime.strptime(to_date_str,'%Y-%m-%d %H:%M')
     #if we radio button is clicked 
     if isinstance(range_h_int,int):
         arrow_time_from     = arrow.utcnow().replace(hours =-range_h_int)
@@ -92,7 +94,7 @@ def getHumJsonData():
     from_date_str = request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #get the from_date
     to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M")) #get the to_date
     range_h_form = request.args.get('range_h','')   #returns a string 
-    
+    timezone      = request.args.get('timezone', 'Etc/UTC');
     print(from_date_str) #testing the url date
     print(to_date_str)
 
