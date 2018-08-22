@@ -59,41 +59,6 @@ def home_env_db():
 
 @app.route("/data.json")
 def getTemJsonData():
-    from_date_str = request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #get the from_date
-    to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M")) #get the to_date
-    range_h_form = request.args.get('range_h','')   #returns a string 
-    timezone      = request.args.get('timezone', 'Etc/UTC');
-    print(from_date_str) #testing the url date
-    print(to_date_str)
-
-    range_h_int  = "none" #initalise this variable with a string 
-
-    try:
-        range_h_int   = int(range_h_form) # convert the string to ints
-    except:
-        print ("Data in range_h_from not a number")
-
-    if not validate_Date(from_date_str):
-        from_date_str = time.strftime("%Y-%m-%d 00:00")
-
-    if not validate_Date(to_date_str):
-        to_date_str   =  time.strftime("%Y-%m-%d %H:%M")  
-    #create datetime object so that we can covert to UTC from the browers local time 
-    from_date_obj     = datetime.datetime.strptime(from_date_str,'%Y-%m-%d %H:%M')
-    to_date_obj       = datetime.datetime.strptime(to_date_str,'%Y-%m-%d %H:%M')
-    #if we radio button is clicked 
-    if isinstance(range_h_int,int):
-        arrow_time_from     = arrow.utcnow().replace(hours =-range_h_int)
-        arrow_time_to       = arrow.utcnow()
-        from_date_utc       = arrow_time_from.strftime("%Y-%m-%d %H:%M")
-        to_date_utc         = arrow_time_to.strftime("%Y-%m-%d %H:%M")
-        from_date_str       = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
-        to_date_str         = arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
-    else:
-        #convert datetimes to UTC so we can retrive the approprite records from the database
-        from_date_utc = arrow.get(from_date_obj,timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
-        to_date_utc = arrow.get(to_date_obj,timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
-    
     db_connect    = sqlite3.connect('/var/www/lab_app/home_app.db') #provide an absolute file path
                                                                      #to the database 
     curs = db_connect.cursor()
@@ -105,41 +70,6 @@ def graphTemp():
     return render_template('graph.html')
 @app.route("/humdata.json")
 def getHumJsonData():
-    from_date_str = request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #get the from_date
-    to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M")) #get the to_date
-    range_h_form = request.args.get('range_h','')   #returns a string 
-    timezone      = request.args.get('timezone', 'Etc/UTC');
-    print(from_date_str) #testing the url date
-    print(to_date_str)
-
-    range_h_int  = "none" #initalise this variable with a string 
-
-    try:
-        range_h_int   = int(range_h_form) # convert the string to ints
-    except:
-        print ("Data in range_h_from not a number")
-
-    if not validate_Date(from_date_str):
-        from_date_str = time.strftime("%Y-%m-%d 00:00")
-
-    if not validate_Date(to_date_str):
-        to_date_str   =  time.strftime("%Y-%m-%d %H:%M")  
-    #create datetime object so that we can covert to UTC from the browers local time 
-    from_date_obj     = datetime.datetime.strptime(from_date_str,'%Y-%m-%d %H:%M')
-    to_date_obj       = datetime.datetime.strptime(to_date_str,'%Y-%m-%d %H:%M')
-    #if we radio button is clicked 
-    if isinstance(range_h_int,int):
-        arrow_time_from     = arrow.utcnow().replace(hours =-range_h_int)
-        arrow_time_to       = arrow.utcnow()
-        from_date_utc       = arrow_time_from.strftime("%Y-%m-%d %H:%M")
-        to_date_utc         = arrow_time_to.strftime("%Y-%m-%d %H:%M")
-        from_date_str       = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
-        to_date_str         = arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
-    else:
-        #convert datetimes to UTC so we can retrive the approprite records from the database
-        from_date_utc = arrow.get(from_date_obj,timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
-        to_date_utc = arrow.get(to_date_obj,timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
-    
     db_connect    = sqlite3.connect('/var/www/lab_app/home_app.db') #provide an absolute file path
                                                                      #to the database 
     curs = db_connect.cursor()
