@@ -30,6 +30,9 @@ app.debug = True
 def hello():
     return render_template("home.html")
 
+@app.route("/signin")
+def login():
+    return render_template("signin.html")
 @app.route("/home_temp")
 def home_temp():
     humidity,temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 17)
