@@ -158,7 +158,7 @@
 
     function drawChart() {
         var jsonData = $.ajax({
-            url: "http://10.0.0.54/data.json",
+            url: "data.json",
             dataType: "json",
         }).done(function (results) {
             // Create our data table out of JSON data loaded from server.
@@ -218,7 +218,7 @@
 
     function drawChart() {
         var jsonData = $.ajax({
-            url: "http://10.0.0.54/humdata.json",
+            url: "humdata.json",
             dataType: "json",
         }).done(function (results) {
             // Create our data table out of JSON data loaded from server.
