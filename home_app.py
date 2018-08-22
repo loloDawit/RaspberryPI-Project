@@ -8,13 +8,27 @@ import json
 import arrow 
 import plotly.plotly as py
 from plotly.graph_objs import *
+import json
+import urllib
+import pyrebase
+
+config = {
+    "apiKey": "AIzaSyCjus5r37Db4dTxNjUzAI_hzsRj-Y_MGXk",
+    "authDomain": "raspberrypi-6291e.firebaseapp.com",
+    "databaseURL": "https://raspberrypi-6291e.firebaseio.com",
+    "projectId": "raspberrypi-6291e",
+    "storageBucket": "raspberrypi-6291e.appspot.com",
+    "messagingSenderId": "199006368775"
+  }
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
 
 app = Flask(__name__)
 app.debug = True
 
 @app.route("/")
 def hello():
-    return "hello world"
+    return getFirebaseData()
 
 @app.route("/home_temp")
 def home_temp():
@@ -240,6 +254,23 @@ def validate_Date(date):
         return True
     except ValueError:
         return False
+@app.route('/firebase')
+def sendData():
+    #authenticate a user
+    auth = firebase.auth()
+    user = auth.sign_in_with_email_and_password("william@hackbrightacademy.com", "mySuperStrongPassword")
+    
+    
+    newdata = getDataRecords()
+
+    db.child("tempRecord").push(newdata)
+    return 'Success'
+def getFirebaseData():
+    getdata = db.child("tempRecord").get()
+    for data in getdata.each():
+        print (data.key())
+        print (data.val()) 
+    return 'Hey'  
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=8080)
