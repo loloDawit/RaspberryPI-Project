@@ -28,7 +28,7 @@ app.debug = True
 
 @app.route("/")
 def hello():
-    return getFirebaseData()
+    return render_template("home.html")
 
 @app.route("/home_temp")
 def home_temp():
@@ -190,13 +190,22 @@ def sendData():
     auth = firebase.auth()
     user = auth.sign_in_with_email_and_password("william@hackbrightacademy.com", "mySuperStrongPassword")
     
-    
-    newdata = getDataRecords()
+    db_connect    = sqlite3.connect('/var/www/lab_app/home_app.db') #provide an absolute file path
+                                                                     #to the database 
+    curs = db_connect.cursor()
+    curs.execute("SELECT *FROM humidities");
+    humidity = curs.fetchall()
+    curs.execute("SELECT *FROM temperatures");
+    temperature = curs.fetchall()
 
-    db.child("tempRecord").push(newdata)
+
+    db.child("tempRecord").push(temperature)
+    db.child("humRecord").push(humidity)
+
     return 'Success'
 def getFirebaseData():
     getdata = db.child("tempRecord").get()
+    
     for data in getdata.each():
         print (data.key())
         print (data.val()) 
